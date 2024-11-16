@@ -1,116 +1,24 @@
+// const gameFlow = (function(){
 
 
+//     // const mode = localStorage.getItem("mode"); //accessing mode which is written in the other page
+//     // const playerOneName = localStorage.getItem("playerOneName");
+//     // const playerTwoName = localStorage.getItem("playerTwoName");
+//     // const playerOneSide = localStorage.getItem("playerOne");
+//     // const playerTwoSide = localStorage.getItem("playerTwo");
 
-const uiFlow = (function (){
-
-    if(document.getElementById("gameModeSelection")){
-        // ui
-        const multiplayerButton = document.querySelector("#multiplayer");
-        const singleplayerButton = document.querySelector("#singleplayer");
-        const dialog = document.querySelector("#dialog");
-        const singlePlayerDialog = document.querySelector("#single-mode");
-
-        
-        let mode;
-        let playerTwo;
-        let playerOne;
-
-        singleplayerButton.addEventListener("click",()=>{
-            mode = "Single Player";
-
-            singlePlayerDialog.showModal();
-
-            const playerOneInput = singlePlayerDialog.querySelector("#single-mode-player-name");
-            const close = document.querySelector("#Cancel");
-            const submit = singlePlayerDialog.querySelector("#submit");
-            let playerOneMarker;
-            let computerMarker;
-
-            close.addEventListener("click",()=>{
-                playerOneInput.value = "";
-                singlePlayerDialog.close();
-            })
-
- 
-            submit.addEventListener("click",()=>{
-
-                playerOneName = playerOneInput.value;
-                playerTwoName = "Computer";
-                playerOneInput.value = "";
-                // getting the input from the selector
-                sides = document.getElementsByName("single-player-side-selection");
-                if(sides[0].checked){
-                    playerOneMarker = "x";
-                    computerMarker = "o";
-                }
-                else{
-                    playerOneMarker = "o";
-                    computerMarker = "x";
-                }
-
-                playerOne = {"name":playerOneName , "marker":playerOneMarker}
-                playerTwo = {"name":"Computer" , "marker":computerMarker}
-
-                console.log(playerOne,playerTwo);
-                // redirect to new page 
-                window.open("/pages/game.html","_self")
-                singlePlayerDialog.close()
-                gameRounds(mode,playerOne,playerTwo)
-                
-                
-                })
+//     // //clearing from the memory
+//     // localStorage.removeItem("mode");
+//     // localStorage.removeItem("playerOneName");
+//     // localStorage.removeItem("playerTwoName");
+//     // localStorage.removeItem("playerOne");
+//     // localStorage.removeItem("playerTwo");
 
 
-        })
-            
-        multiplayerButton.addEventListener("click",()=>{
+//     // gameRounds(mode,playerOneSide,playerTwoSide,playerOneName,playerTwoName)
+// })();
 
-            mode = "Multi Player";
-            
-            dialog.showModal();
-
-            const close = dialog.querySelector("#Cancel");
-            close.addEventListener("click",()=>{
-                playerOneInput.value = "";
-                playerTwoInput.value = "";
-                dialog.close();
-            })
-
-            const submit = dialog.querySelector("#submit");
-            submit.addEventListener("click",()=>{
-                const playerOneInput = dialog.querySelector("#player-one-name");
-                const playerTwoInput = dialog.querySelector("#player-two-name");
-
-                const playerXName = playerOneInput.value;
-                const playerOName = playerTwoInput.value;
-
-                playerOne = {"name":playerXName , "marker":"x"};
-                playerTwo = {"name":playerOName , "marker":"o"};
-
-                playerOneInput.value = "";
-                playerTwoInput.value = "";
-
-                // redirect to new page 
-                dialog.close();
-                gameRounds(mode,playerOne,playerTwo)
-                window.open("/pages/game.html","_self");
-
-
-                
-
-                
-                })
-
-            })
-    } 
-
-
-
-    
-})();
-
-
-
+gameRounds("Single Player", "x", "o")
 
 
 function computerguess(array,cpSide){
@@ -233,11 +141,9 @@ function computerguess(array,cpSide){
 
 
 
-function gameRounds(mode, playerOne, playerTwo){
-    const playerOneMarker= playerOne.marker;  // whether 1st player is x or o
-    const playerTwoMarker= playerTwo.marker;  // whether 2nd player is x or o
-    console.log(playerOneMarker,playerTwoMarker)
-
+function gameRounds(mode,playerOneSide,playerTwoSide,playerOneName = "player One",playerTwoName = "player Two"){
+    //  playerOneSide;  // whether 1st player is x or o
+    //  playerTwoSide;  // whether 2nd player is x or o
     let gameboard = [];
     for(let i = 0 ; i<= 8 ; i++){
         gameboard[i] = i;
@@ -370,5 +276,3 @@ function changeDisplay(message){
     rollingDisplay.innerHTML = message ;
 
 }
-
-

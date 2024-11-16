@@ -1,0 +1,164 @@
+:root{
+    --charecter-color: #CAE9EA;
+    --gradient-right: linear-gradient(to right, #CAE9EA, #208C8C);
+    --gradient-left: linear-gradient(to left, #CAE9EA,#208C8C);
+    --secondary-color: #208C8C ;
+    --background-color: #100F0F;
+    --background-color2: black;
+    --border-color-cards: rgba(71,71,71,50%);
+}
+
+*{
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    font-family: Roboto,sans-serif;
+}
+
+
+
+body{
+    background-color: var(--background-color);
+    height: 100%;
+}
+.main{
+    margin-top: 20vh;
+    color: var(--charecter-color);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.heading {
+    font-size: 72px;
+    padding: 24px;
+    font-weight: 500;
+}
+
+.option {
+    width: 800px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.option-select-head {
+    font-size: 28px;
+    font-weight: 500;
+}
+.single-multi-option {
+    
+    padding-top: 24px;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    
+}
+
+.single-player , .multiplayer {
+    height: 100px;
+    width: 360px;
+    border-radius: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--charecter-color);
+}
+
+.single-player a , .multiplayer a {
+    color: var(--secondary-color);
+    font-weight: 700;
+    font-size: 36px;
+    text-decoration: none;
+}
+
+
+/* dialog */
+
+dialog{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    border: none;
+    height: 240px;
+    width: 360px;
+    
+    border-radius: 40px;
+    background-color: var(--charecter-color);
+}
+.dialog {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    height: 100%;
+}
+.player-head {
+    font-weight: 700;
+    color: var(--secondary-color);
+    font-size: 36px;
+}
+.dialog input[type="text"] {
+    height: 28px;
+    width: 200px;
+    border: none;
+    background-color: var(--secondary-color);
+    border-radius: 12px;
+}
+.multiplayer-dialog label{
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--secondary-color);
+}
+
+.buttons-dialog button{
+    width: 100px;
+    height: 28px;
+    border-radius: 12px;
+    border: none;
+    background-color: var(--secondary-color);
+    color: var(--charecter-color);
+    font-weight: 500;
+}
+.buttons-dialog {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    padding-bottom: 8px;
+}
+
+/* single player dialog */
+
+.single-input-elements form{
+    display: flex;
+    justify-content: space-around;
+
+}
+.single-input-elements span{
+    font-size: 28px;
+    color: var(--secondary-color);
+    font-weight: 500;
+}
+.single-input-elements input[type="radio"]{
+    height: 20px;
+    width: 30px;
+    accent-color: var(--secondary-color);
+}
+.name-of-single-player-label {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--secondary-color);
+}
+
+.single-input-elements {
+    height: 120px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+.single-dialog-heading {
+    font-weight: 700;
+    font-size: 24px;
+    color: var(--secondary-color);
+}

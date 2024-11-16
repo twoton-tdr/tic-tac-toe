@@ -4,10 +4,98 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tic Tac Toe</title>
-    <link rel="stylesheet" href="style.css">
+
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <link rel="stylesheet" href="/stylesheets/fonts.css">
     <script src="script.js" defer></script>
 </head>
 <body>
+    <div class="content">
+        <div class="main">
+            <div class="heading">
+                TIC TAC TOE
+            </div>
+            <div class="option">
+                <div class="option-select-head">
+                    SELECT GAME MODE
+                </div>
+                <div class="single-multi-option" id="gameModeSelection">
+                    <button class="single-player" id="singleplayer">
+                        <a>SINGLE PLAYER</a>
+                    </button>
+                    <button class="multiplayer" id="multiplayer">
+                        <a>MULTIPLAYER</a>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Singleplayer mode dialog -->
+    <dialog id="single-mode">
+        <div class="dialog">
+            <div class="single-input-elements">
+                <div>
+                    <div class="single-dialog-heading">SIDE SELECTION</div>
+                    <form>
+                        <span class="span-single-player">
+                            <label for="single-player-side-X">X</label>
+                            <input type="radio" name="single-player-side-selection" id="single-player-side-X" value="X" checked>
+                        </span>
     
+                        <span>
+                            <label for="single-player-side-O">O</label>
+                            <input type="radio" name="single-player-side-selection" id="single-player-side-O" value="O">
+                        </span>
+                    </form>
+                </div>
+
+                <div>
+                    <label for="single-mode-player-name" class="name-of-single-player-label">Name :</label>
+                    <input type="text" id="single-mode-player-name">
+                </div>
+            </div>
+
+            <div class="buttons-dialog">
+                <button id="submit">SUBMIT</button>
+                <button id="Cancel">CANCEL</button>
+            </div>
+        </div>
+    </dialog>
+
+    <!-- multiplayer mode dialog -->
+    <dialog id="dialog" class="multiplayer-dialog">
+       <div class="dialog">
+            <div class="input-elements">
+                <div class="player-one">
+                    <div class="player-head">
+                        X
+                    </div>
+                    <div class="player-one-details">
+                        <label for="player-one-name" >
+                            PLAYER ONE :
+                        </label>
+                        <input type="text" id="player-one-name" >
+                    </div>
+                </div>
+    
+                <div class="player-two">
+                    <div class="player-head">
+                        O
+                    </div>
+                    <div class="player-two-details">
+                        <label for="player-two-name" >
+                            PLAYER TWO :
+                        </label>
+                        <input type="text" id="player-two-name" >
+                    </div>
+                </div>
+            </div>
+            <div class="buttons-dialog">
+                <button id="submit">SUBMIT</button>
+                <button id="Cancel">CANCEL</button>
+            </div>
+       </div>
+    </dialog>
 </body>
 </html>
