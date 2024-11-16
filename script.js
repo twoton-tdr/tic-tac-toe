@@ -92,9 +92,9 @@ const uiFlow = (function (){
 
                 // redirect to new page 
                 dialog.close();
-                gameRounds(mode,playerOne,playerTwo)
-                window.open("/pages/game.html","_self");
-
+                
+                
+                gameRounds(mode,playerOne,playerTwo);
 
                 
 
@@ -234,6 +234,8 @@ function computerguess(array,cpSide){
 
 
 function gameRounds(mode, playerOne, playerTwo){
+    window.open("/pages/game.html","_self");
+    
     const playerOneMarker= playerOne.marker;  // whether 1st player is x or o
     const playerTwoMarker= playerTwo.marker;  // whether 2nd player is x or o
     console.log(playerOneMarker,playerTwoMarker)
@@ -258,13 +260,13 @@ function gameRounds(mode, playerOne, playerTwo){
         }
         if(round%2 == 0){
             if(mode == "Single Player"){
-                let inputTwo = computerguess(gameboard,playerTwoSide);
+                let inputTwo = computerguess(gameboard,playerTwoMarker);
                 if(gameboard[inputTwo]==="x" | gameboard[inputTwo] === "o"){
                     return input(round);
                 }
                 else{
-                    gameBoardNodeList[inputTwo].innerHTML = playerTwoSide;
-                    gameboard[inputTwo]= playerTwoSide;
+                    gameBoardNodeList[inputTwo].innerHTML = playerTwoMarker;
+                    gameboard[inputTwo]= playerTwoMarker;
                     round++;
                     gameEndMessage = isWin(round,gameboard , gameEndMessage);
                     return input(round);
@@ -295,8 +297,8 @@ function gameRounds(mode, playerOne, playerTwo){
         
         else if(round%2 === 1){
             let inputOne = prompt("enter the number");
-            gameBoardNodeList[inputOne].innerHTML = playerOneSide;
-            gameboard[inputOne] = playerOneSide;
+            gameBoardNodeList[inputOne].innerHTML = playerOneMarker;
+            gameboard[inputOne] = playerOneMarker;
             round++;
             gameEndMessage = isWin(round,gameboard , gameEndMessage)
             return input(round)
