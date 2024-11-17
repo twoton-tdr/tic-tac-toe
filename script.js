@@ -256,11 +256,17 @@ function gameRounds(mode, playerOne, playerTwo){
     let round = 0;
 
     // input(roundNumber)
-
+    
     gameCells.addEventListener("click",(e)=>{
-        if(gameEndMessage.includes("wins") | gameEndMessage.includes("draw")){
+        let gameEnd = gameEndMessage.includes("wins") | gameEndMessage.includes("draw");
+        console.log(e)
+        if(gameEnd){
             round = 0;
-            // return alert(gameEndMessage);
+            alert(gameEndMessage)
+            for(let i=0;i<=8;i++){
+                gameBoardNodeList[i].innerHTML = "";
+                gameboard[i]="";
+            }
         }
 
         if(round%2 == 0){
@@ -308,9 +314,30 @@ function gameRounds(mode, playerOne, playerTwo){
             
         }
 
-        console.log(e)
 
     })
+
+    gameCells.addEventListener("click",()=>{
+        gameEndMessage = isWin(round,gameboard, gameEndMessage);
+        let gameEnd = gameEndMessage.includes("wins") | gameEndMessage.includes("draw");
+
+        console.log(gameEndMessage)
+        if(gameEnd){
+                round = 0;
+                const winningCells = winingCells(gameboard);
+                winningCells.forEach(changeCellColor);
+                for(let i = 0 ; i<=8 ; i++){
+                    gameBoardNodeList[i].disabled = true;
+                }
+            }
+
+        
+    })
+
+    function changeCellColor(i){
+        gameBoardNodeList[i].style.backgroundColor = "black";
+        gameBoardNodeList[i].style.color = "white";
+    }
 
     // function input(round){
     //     if(gameEndMessage.includes("wins") | gameEndMessage.includes("draw")){
@@ -393,11 +420,46 @@ function gameRounds(mode, playerOne, playerTwo){
 
 }
 
+function winingCells (gameboard) {
+    
+    if (gameboard[6] === gameboard[4] && gameboard[4] === gameboard[2]){
+        return [6,4,2]
+
+    }
+    else if (gameboard[0] === gameboard[3] && gameboard[3] === gameboard[6]){
+        return [0,3,6]
+    }
+    else if (gameboard[1] === gameboard[4] && gameboard[4] === gameboard[7]){
+        return [1,4,7]
+    }
+    else if (gameboard[2] === gameboard[5] && gameboard[5] === gameboard[8]){
+        return [2,5,8]
+    }
+    else if (gameboard[0] === gameboard[1] && gameboard[1] === gameboard[2]){
+        return [0,1,2]
+    }
+    else if (gameboard[3] === gameboard[4] && gameboard[3] === gameboard[5]){
+        return [3,4,5]
+    }
+    else if (gameboard[6] === gameboard[7] && gameboard[7] === gameboard[8]){
+        return [6,7,8]
+    }
+    else if (gameboard[0] === gameboard[4] && gameboard[4] === gameboard[8]){
+        return [0,4,8]
+    }
+    else if(k == 9){
+        return 0;
+    }
+    else{
+        return 0;
+    }
+}
 
 function isWin (k , gameboard , gameEndMessage) {
- 
+    
     if (gameboard[6] === gameboard[4] && gameboard[4] === gameboard[2]){
-        gameEndMessage = `${gameboard[6]} wins`
+        gameEndMessage = `${gameboard[6]} wins`;
+
     }
     else if (gameboard[0] === gameboard[3] && gameboard[3] === gameboard[6]){
         gameEndMessage = `${gameboard[6]} wins`
