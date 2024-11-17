@@ -52,8 +52,8 @@ const uiFlow = (function (){
                 playerTwo = {"name":"Computer" , "marker":computerMarker}
 
                 console.log(playerOne,playerTwo);
-                // redirect to new page 
-                window.open("/pages/game.html","_self")
+                
+
                 singlePlayerDialog.close()
                 gameRounds(mode,playerOne,playerTwo)
                 
@@ -66,6 +66,8 @@ const uiFlow = (function (){
         multiplayerButton.addEventListener("click",()=>{
 
             mode = "Multi Player";
+            const playerOneInput = dialog.querySelector("#player-one-name");
+            const playerTwoInput = dialog.querySelector("#player-two-name");
             
             dialog.showModal();
 
@@ -73,13 +75,13 @@ const uiFlow = (function (){
             close.addEventListener("click",()=>{
                 playerOneInput.value = "";
                 playerTwoInput.value = "";
+                console.log("close clicked")
                 dialog.close();
             })
 
             const submit = dialog.querySelector("#submit");
             submit.addEventListener("click",()=>{
-                const playerOneInput = dialog.querySelector("#player-one-name");
-                const playerTwoInput = dialog.querySelector("#player-two-name");
+
 
                 const playerXName = playerOneInput.value;
                 const playerOName = playerTwoInput.value;
@@ -212,19 +214,19 @@ function computerguess(array,cpSide){
             
                 }
 
-    
-    
-    return guessACell()
-    
     function guessACell(){
         let number = Math.round(Math.random()*10);
         if(number > 8){
             return guessACell();
-        }
+            }
         else{
             return number;
+            }
         }
-    }
+    
+    return guessACell()
+    
+
 
     
 
@@ -234,7 +236,7 @@ function computerguess(array,cpSide){
 
 
 function gameRounds(mode, playerOne, playerTwo){
-    window.open("/pages/game.html","_self");
+    
     
     const playerOneMarker= playerOne.marker;  // whether 1st player is x or o
     const playerTwoMarker= playerTwo.marker;  // whether 2nd player is x or o
@@ -249,80 +251,145 @@ function gameRounds(mode, playerOne, playerTwo){
     
     let gameEndMessage = "";
     
+    let gameCells = document.querySelector(".game-board");
     
-    let roundNumber = 0;
+    let round = 0;
 
-    input(roundNumber)
-    function input(round){
+    // input(roundNumber)
+
+    gameCells.addEventListener("click",(e)=>{
         if(gameEndMessage.includes("wins") | gameEndMessage.includes("draw")){
             round = 0;
             // return alert(gameEndMessage);
         }
+
         if(round%2 == 0){
             if(mode == "Single Player"){
                 let inputTwo = computerguess(gameboard,playerTwoMarker);
                 if(gameboard[inputTwo]==="x" | gameboard[inputTwo] === "o"){
-                    return input(round);
+                    inputTwo = computerguess(gameboard,playerTwoMarker)
                 }
-                else{
-                    gameBoardNodeList[inputTwo].innerHTML = playerTwoMarker;
-                    gameboard[inputTwo]= playerTwoMarker;
-                    round++;
-                    gameEndMessage = isWin(round,gameboard , gameEndMessage);
-                    return input(round);
-                }
-            }
-            // else if(mode == "Multiplayer"){
                 
-            //     for(let i = 0; i<= 8 ; i++){
-            //         if(gameboard[i]==="x" | gameboard[i] === "o"){
-            //             i++;
-            //             continue;
-            //         }
-            //         gameBoardNodeList[i].addEventListener("click", (e)=>{
-                        
-            //             gameBoardNodeList[i].innerHTML = playerTwoSide;
-            //             gameboard[i]= playerTwoSide;
-            //             round++;
-            //             gameEndMessage = isWin(round,gameboard , gameEndMessage)
-            //             return input(round);
-            //         })
-            //     }
-            // }   
+                gameBoardNodeList[inputTwo].innerHTML = playerTwoMarker;
+                gameboard[inputTwo]= playerTwoMarker;
+                round++;
+                gameEndMessage = isWin(round,gameboard , gameEndMessage);
+                
+            }
+            else if(mode == "Multi Player"){
+                if(e.target.dataset.number){
+                    console.log(` ${round} ${playerTwoMarker}`)
+                    e.target.disabled = true;
+                    const i = e.target.dataset.number;
+                    gameBoardNodeList[i].innerHTML = playerTwoMarker;
+                    gameboard[i]= playerTwoMarker;
+                    round++;
+                    gameEndMessage = isWin(round,gameboard , gameEndMessage)
+                }
+            }   
+            
 
         }
         else if(round === 9){
             isWin(round,gameboard , gameEndMessage)
+            gameEndMessage = "";
         }
         
         else if(round%2 === 1){
-            let inputOne = prompt("enter the number");
-            gameBoardNodeList[inputOne].innerHTML = playerOneMarker;
-            gameboard[inputOne] = playerOneMarker;
-            round++;
-            gameEndMessage = isWin(round,gameboard , gameEndMessage)
-            return input(round)
+            if(e.target.dataset.number){
+                console.log(` ${round} ${playerOneMarker}`)
+                e.target.disabled = true;
+                const i = e.target.dataset.number;
+                gameBoardNodeList[i].innerHTML = playerOneMarker;
+                gameboard[i]= playerOneMarker;
+                round++;
+                gameEndMessage = isWin(round,gameboard , gameEndMessage)
+            }
             
-            // for(let i = 0; i<= 8 ; i++){
-            //     if(gameboard[i]==="x" | gameboard[i] === "o"){
-            //         continue;
-            //     }
-            //     gameBoardNodeList[i].addEventListener("click",(e)=>{
-            //         console.log(e)
-            //         console.log(`click ${round}`)
-            //         gameBoardNodeList[i].innerHTML = playerOneSide;
-            //         gameboard[i]= playerOneSide;
-            //         gameEndMessage = isWin(round,gameboard , gameEndMessage)
-            //         round++;
-            //         return input(round);
-
-            //     })
-
-
-            // } 
-
         }
-    }
+
+        console.log(e)
+
+    })
+
+    // function input(round){
+    //     if(gameEndMessage.includes("wins") | gameEndMessage.includes("draw")){
+    //         round = 0;
+    //         // return alert(gameEndMessage);
+    //     }
+    //     if(round%2 == 0){
+    //         if(mode == "Single Player"){
+    //             let inputTwo = computerguess(gameboard,playerTwoMarker);
+    //             if(gameboard[inputTwo]==="x" | gameboard[inputTwo] === "o"){
+    //                 inputTwo = computerguess(gameboard,playerTwoMarker)
+    //             }
+                
+    //             gameBoardNodeList[inputTwo].innerHTML = playerTwoMarker;
+    //             gameboard[inputTwo]= playerTwoMarker;
+    //             round++;
+    //             gameEndMessage = isWin(round,gameboard , gameEndMessage);
+    //             return input(round);
+                
+    //         }
+    //         else if(mode == "Multi Player"){
+                
+    //             gameCells.addEventListener("click",(e)=>{
+    //                 console.log(e)
+    //                 if(e.target.dataset.number){
+    //                     console.log(playerTwoMarker);
+    //                     e.target.disabled = true;
+    //                     const i = e.target.dataset.number;
+    //                     gameBoardNodeList[i].innerHTML = playerTwoMarker;
+    //                     gameboard[i]= playerTwoMarker;
+    //                     gameEndMessage = isWin(round,gameboard , gameEndMessage)
+    //                     round++;
+                        
+    //                     return input(round);
+    //                 }
+    //             })
+                
+    //         }   
+            
+
+    //     }
+    //     else if(round === 9){
+    //         isWin(round,gameboard , gameEndMessage)
+    //         gameEndMessage = "";
+    //     }
+        
+    //     else if(round%2 === 1){
+    //         // let inputOne = prompt("enter the number");
+    //         // gameBoardNodeList[inputOne].innerHTML = playerOneMarker;
+    //         // gameboard[inputOne] = playerOneMarker;
+    //         // round++;
+    //         // gameEndMessage = isWin(round,gameboard , gameEndMessage)
+    //         // return input(round)
+            
+            
+
+
+
+    //         // for(let i = 0; i<= 8 ; i++){
+    //         //     if(gameboard[i]==="x" | gameboard[i] === "o"){
+    //         //         continue;
+    //         //     }
+    //         //     gameBoardNodeList[i].addEventListener("click",(e)=>{
+    //         //         console.log(e);
+    //         //         e.target.disabled = true;
+    //         //         console.log(`round ${round}`)
+    //         //         gameBoardNodeList[i].innerHTML = playerOneMarker;
+    //         //         gameboard[i]= playerOneMarker;
+    //         //         round++;
+    //         //         gameEndMessage = isWin(round,gameboard , gameEndMessage)
+    //         //         return input(round);
+    //         //     })
+
+
+    //         // } 
+            
+    //     }
+        
+    // }
 
 }
 
