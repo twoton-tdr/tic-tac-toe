@@ -243,31 +243,27 @@ function gameRounds(mode, playerOne, playerTwo){
     console.log(playerOneMarker,playerTwoMarker)
 
     let gameboard = [];
+    let gameBoardNodeList = document.querySelectorAll(".box");
     for(let i = 0 ; i<= 8 ; i++){
         gameboard[i] = i;
+        
     }
     
-    let gameBoardNodeList = document.querySelectorAll(".box");
+    
     
     let gameEndMessage = "";
-    
     let gameCells = document.querySelector(".game-board");
     
+    let restart = document.querySelector("#restart");
+    restart.disabled = true;
+    restart.classList.add("disabled");
+
     let round = 0;
 
     // input(roundNumber)
     
     gameCells.addEventListener("click",(e)=>{
-        let gameEnd = gameEndMessage.includes("wins") | gameEndMessage.includes("draw");
         console.log(e)
-        if(gameEnd){
-            round = 0;
-            alert(gameEndMessage)
-            for(let i=0;i<=8;i++){
-                gameBoardNodeList[i].innerHTML = "";
-                gameboard[i]="";
-            }
-        }
 
         if(round%2 == 0){
             if(mode == "Single Player"){
@@ -279,7 +275,7 @@ function gameRounds(mode, playerOne, playerTwo){
                 gameBoardNodeList[inputTwo].innerHTML = playerTwoMarker;
                 gameboard[inputTwo]= playerTwoMarker;
                 round++;
-                gameEndMessage = isWin(round,gameboard , gameEndMessage);
+                gameEndMessage = isWin(round,gameboard);
                 
             }
             else if(mode == "Multi Player"){
@@ -290,15 +286,15 @@ function gameRounds(mode, playerOne, playerTwo){
                     gameBoardNodeList[i].innerHTML = playerTwoMarker;
                     gameboard[i]= playerTwoMarker;
                     round++;
-                    gameEndMessage = isWin(round,gameboard , gameEndMessage)
+                    gameEndMessage = isWin(round,gameboard)
                 }
             }   
             
 
         }
         else if(round === 9){
-            isWin(round,gameboard , gameEndMessage)
-            gameEndMessage = "";
+            
+            gameEndMessage = isWin(round,gameboard);
         }
         
         else if(round%2 === 1){
@@ -309,7 +305,7 @@ function gameRounds(mode, playerOne, playerTwo){
                 gameBoardNodeList[i].innerHTML = playerOneMarker;
                 gameboard[i]= playerOneMarker;
                 round++;
-                gameEndMessage = isWin(round,gameboard , gameEndMessage)
+                gameEndMessage = isWin(round,gameboard)
             }
             
         }
@@ -318,106 +314,44 @@ function gameRounds(mode, playerOne, playerTwo){
     })
 
     gameCells.addEventListener("click",()=>{
-        gameEndMessage = isWin(round,gameboard, gameEndMessage);
-        let gameEnd = gameEndMessage.includes("wins") | gameEndMessage.includes("draw");
-
-        console.log(gameEndMessage)
+        gameEndMessage = isWin(round,gameboard);
+        let gameEnd = (gameEndMessage.includes("wins") | gameEndMessage.includes("draw"));
+        let isWon = gameEndMessage.includes("wins")
         if(gameEnd){
                 round = 0;
-                const winningCells = winingCells(gameboard);
-                winningCells.forEach(changeCellColor);
+                if(isWon){
+                    const winningCells = winingCells(gameboard);
+                    winningCells.forEach(changeCellColor);
+                }
+
                 for(let i = 0 ; i<=8 ; i++){
                     gameBoardNodeList[i].disabled = true;
                 }
+                restart.classList.remove("disabled");
+                restart.disabled = false;
             }
-
-        
     })
 
+    restart.addEventListener("click",()=>{
+        gameBoardNodeList.forEach((value)=>{
+            value.innerHTML = "";
+            value.style.backgroundColor = "#CAE9EA";
+            value.style.color = "black";
+            value.disabled = false;
+        })
+
+        for(let i = 0 ; i<= 8 ; i++){
+            gameboard[i] = i;
+            
+        }
+        gameRounds(mode,playerOne,playerTwo)
+    })
     function changeCellColor(i){
         gameBoardNodeList[i].style.backgroundColor = "black";
         gameBoardNodeList[i].style.color = "white";
     }
 
-    // function input(round){
-    //     if(gameEndMessage.includes("wins") | gameEndMessage.includes("draw")){
-    //         round = 0;
-    //         // return alert(gameEndMessage);
-    //     }
-    //     if(round%2 == 0){
-    //         if(mode == "Single Player"){
-    //             let inputTwo = computerguess(gameboard,playerTwoMarker);
-    //             if(gameboard[inputTwo]==="x" | gameboard[inputTwo] === "o"){
-    //                 inputTwo = computerguess(gameboard,playerTwoMarker)
-    //             }
-                
-    //             gameBoardNodeList[inputTwo].innerHTML = playerTwoMarker;
-    //             gameboard[inputTwo]= playerTwoMarker;
-    //             round++;
-    //             gameEndMessage = isWin(round,gameboard , gameEndMessage);
-    //             return input(round);
-                
-    //         }
-    //         else if(mode == "Multi Player"){
-                
-    //             gameCells.addEventListener("click",(e)=>{
-    //                 console.log(e)
-    //                 if(e.target.dataset.number){
-    //                     console.log(playerTwoMarker);
-    //                     e.target.disabled = true;
-    //                     const i = e.target.dataset.number;
-    //                     gameBoardNodeList[i].innerHTML = playerTwoMarker;
-    //                     gameboard[i]= playerTwoMarker;
-    //                     gameEndMessage = isWin(round,gameboard , gameEndMessage)
-    //                     round++;
-                        
-    //                     return input(round);
-    //                 }
-    //             })
-                
-    //         }   
-            
-
-    //     }
-    //     else if(round === 9){
-    //         isWin(round,gameboard , gameEndMessage)
-    //         gameEndMessage = "";
-    //     }
-        
-    //     else if(round%2 === 1){
-    //         // let inputOne = prompt("enter the number");
-    //         // gameBoardNodeList[inputOne].innerHTML = playerOneMarker;
-    //         // gameboard[inputOne] = playerOneMarker;
-    //         // round++;
-    //         // gameEndMessage = isWin(round,gameboard , gameEndMessage)
-    //         // return input(round)
-            
-            
-
-
-
-    //         // for(let i = 0; i<= 8 ; i++){
-    //         //     if(gameboard[i]==="x" | gameboard[i] === "o"){
-    //         //         continue;
-    //         //     }
-    //         //     gameBoardNodeList[i].addEventListener("click",(e)=>{
-    //         //         console.log(e);
-    //         //         e.target.disabled = true;
-    //         //         console.log(`round ${round}`)
-    //         //         gameBoardNodeList[i].innerHTML = playerOneMarker;
-    //         //         gameboard[i]= playerOneMarker;
-    //         //         round++;
-    //         //         gameEndMessage = isWin(round,gameboard , gameEndMessage)
-    //         //         return input(round);
-    //         //     })
-
-
-    //         // } 
-            
-    //     }
-        
-    // }
-
+ 
 }
 
 function winingCells (gameboard) {
@@ -447,15 +381,12 @@ function winingCells (gameboard) {
     else if (gameboard[0] === gameboard[4] && gameboard[4] === gameboard[8]){
         return [0,4,8]
     }
-    else if(k == 9){
-        return 0;
-    }
     else{
         return 0;
     }
 }
 
-function isWin (k , gameboard , gameEndMessage) {
+function isWin (k , gameboard) {
     
     if (gameboard[6] === gameboard[4] && gameboard[4] === gameboard[2]){
         gameEndMessage = `${gameboard[6]} wins`;
@@ -482,8 +413,11 @@ function isWin (k , gameboard , gameEndMessage) {
     else if (gameboard[0] === gameboard[4] && gameboard[4] === gameboard[8]){
         gameEndMessage = `${gameboard[4]} wins`
     }
-    else if(k == 9){
+    else if(k === 9){
         gameEndMessage = `Ends in draw`
+    }
+    else{
+        gameEndMessage = "";
     }
 
     if(gameEndMessage.includes("wins") || gameEndMessage.includes("draw")){
