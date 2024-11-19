@@ -259,93 +259,206 @@ function gameRounds(mode, playerOne, playerTwo){
     restart.classList.add("disabled");
 
     let round = 0;
+    if(mode === "Multi Player"){
+        multiplayerMode()
+    }
+    else{
+        singleplayerMode();
+    }
 
-    // input(roundNumber)
-    
-    gameCells.addEventListener("click",(e)=>{
-        console.log(e)
 
-        if(round%2 == 0){
-            if(mode == "Single Player"){
-                let inputTwo = computerguess(gameboard,playerTwoMarker);
-                if(gameboard[inputTwo]==="x" | gameboard[inputTwo] === "o"){
-                    inputTwo = computerguess(gameboard,playerTwoMarker)
+
+    function multiplayerMode() {
+        gameCells.addEventListener("click",(e)=>{
+            console.log(e)
+
+            if(round%2 == 0){
+                if(mode == "Single Player"){
+                    let inputTwo = computerguess(gameboard,playerTwoMarker);
+                    if(gameboard[inputTwo]==="x" | gameboard[inputTwo] === "o"){
+                        inputTwo = computerguess(gameboard,playerTwoMarker)
+                    }
+                    
+                    gameBoardNodeList[inputTwo].innerHTML = playerTwoMarker;
+                    gameboard[inputTwo]= playerTwoMarker;
+                    round++;
+                    gameEndMessage = isWin(round,gameboard);
+                    
                 }
+                else if(mode == "Multi Player"){
+                    if(e.target.dataset.number){
+                        console.log(` ${round} ${playerTwoMarker}`)
+                        e.target.disabled = true;
+                        const i = e.target.dataset.number;
+                        gameBoardNodeList[i].innerHTML = playerTwoMarker;
+                        gameboard[i]= playerTwoMarker;
+                        round++;
+                        gameEndMessage = isWin(round,gameboard)
+                    }
+                }   
                 
-                gameBoardNodeList[inputTwo].innerHTML = playerTwoMarker;
-                gameboard[inputTwo]= playerTwoMarker;
-                round++;
-                gameEndMessage = isWin(round,gameboard);
-                
+
             }
-            else if(mode == "Multi Player"){
+            else if(round === 9){
+                
+                gameEndMessage = isWin(round,gameboard);
+            }
+            
+            else if(round%2 === 1){
                 if(e.target.dataset.number){
-                    console.log(` ${round} ${playerTwoMarker}`)
+                    console.log(` ${round} ${playerOneMarker}`)
                     e.target.disabled = true;
                     const i = e.target.dataset.number;
-                    gameBoardNodeList[i].innerHTML = playerTwoMarker;
-                    gameboard[i]= playerTwoMarker;
+                    gameBoardNodeList[i].innerHTML = playerOneMarker;
+                    gameboard[i]= playerOneMarker;
                     round++;
                     gameEndMessage = isWin(round,gameboard)
                 }
-            }   
-            
-
-        }
-        else if(round === 9){
-            
-            gameEndMessage = isWin(round,gameboard);
-        }
-        
-        else if(round%2 === 1){
-            if(e.target.dataset.number){
-                console.log(` ${round} ${playerOneMarker}`)
-                e.target.disabled = true;
-                const i = e.target.dataset.number;
-                gameBoardNodeList[i].innerHTML = playerOneMarker;
-                gameboard[i]= playerOneMarker;
-                round++;
-                gameEndMessage = isWin(round,gameboard)
+                
             }
-            
-        }
 
 
-    })
-
-    gameCells.addEventListener("click",()=>{
-        gameEndMessage = isWin(round,gameboard);
-        let gameEnd = (gameEndMessage.includes("wins") | gameEndMessage.includes("draw"));
-        let isWon = gameEndMessage.includes("wins")
-        if(gameEnd){
-                round = 0;
-                if(isWon){
-                    const winningCells = winingCells(gameboard);
-                    winningCells.forEach(changeCellColor);
-                }
-
-                for(let i = 0 ; i<=8 ; i++){
-                    gameBoardNodeList[i].disabled = true;
-                }
-                restart.classList.remove("disabled");
-                restart.disabled = false;
-            }
-    })
-
-    restart.addEventListener("click",()=>{
-        gameBoardNodeList.forEach((value)=>{
-            value.innerHTML = "";
-            value.style.backgroundColor = "#CAE9EA";
-            value.style.color = "black";
-            value.disabled = false;
         })
 
-        for(let i = 0 ; i<= 8 ; i++){
-            gameboard[i] = i;
+        gameCells.addEventListener("click",()=>{
+            gameEndMessage = isWin(round,gameboard);
+            let gameEnd = (gameEndMessage.includes("wins") | gameEndMessage.includes("draw"));
+            let isWon = gameEndMessage.includes("wins")
+            if(gameEnd){
+                    round = 0;
+                    if(isWon){
+                        const winningCells = winingCells(gameboard);
+                        winningCells.forEach(changeCellColor);
+                    }
+
+                    for(let i = 0 ; i<=8 ; i++){
+                        gameBoardNodeList[i].disabled = true;
+                    }
+                    restart.classList.remove("disabled");
+                    restart.disabled = false;
+                }
+        })
+
+        restart.addEventListener("click",()=>{
+            gameBoardNodeList.forEach((value)=>{
+                value.innerHTML = "";
+                value.style.backgroundColor = "#CAE9EA";
+                value.style.color = "black";
+                value.disabled = false;
+            })
+
+            for(let i = 0 ; i<= 8 ; i++){
+                gameboard[i] = i;
+                
+            }
+            gameRounds(mode,playerOne,playerTwo)
+        })
+    }
+
+    function singleplayerMode(){
+
+        firstMove();
+        function firstMove(){
+            let inputTwo = computerguess(gameboard,playerTwoMarker);
+            if(gameboard[inputTwo]==="x" | gameboard[inputTwo] === "o"){ //this might cause error in the future if both the guess is not true
+                firstMove();
+            }
             
+            gameBoardNodeList[inputTwo].innerHTML = playerTwoMarker;
+            gameboard[inputTwo]= playerTwoMarker;
+            round++;    
+            gameEndMessage = isWin(round,gameboard);
         }
-        gameRounds(mode,playerOne,playerTwo)
-    })
+
+        
+        gameCells.addEventListener("click",(e)=>{
+            let status;
+            if(!e.target.innerHTML){
+                if(round != 9){
+                    if(e.target.dataset.number){
+                        console.log(` ${round} ${playerOneMarker}`)
+                        e.target.disabled = true;
+                        const i = e.target.dataset.number;
+                        gameBoardNodeList[i].innerHTML = playerOneMarker;
+                        gameboard[i]= playerOneMarker;
+                        round++;
+                        gameEndMessage = isWin(round,gameboard)
+                        gameBoardNodeList.forEach((button)=>{
+                        button.disabled = true;
+                        })
+                        status = gameWinCheckSinglePlayer(gameEndMessage);
+                        if(!status){
+                            setTimeout(getCinput,500)
+                        }
+                        
+                    }
+
+                    function getCinput(){
+                        
+                        console.log("fired")
+                        console.log(round)
+                        let inputTwo = computerguess(gameboard,playerTwoMarker);
+                        if(gameboard[inputTwo]==="x" | gameboard[inputTwo] === "o"){
+                            getCinput();
+                        }
+                        else{
+                            gameBoardNodeList[inputTwo].innerHTML = playerTwoMarker;
+                            gameboard[inputTwo]= playerTwoMarker;
+                            round++;
+                            gameEndMessage = isWin(round,gameboard);
+    
+                            status = gameWinCheckSinglePlayer(gameEndMessage);
+                            if(!status){
+                                gameBoardNodeList.forEach((button)=>{
+                                    button.disabled = false;
+                                })
+                            }
+                            else{
+                                gameBoardNodeList.forEach((button)=>{
+                                    button.disabled = true;
+                                })
+                            }
+                        }
+
+                    }
+
+                    function gameWinCheckSinglePlayer(gameEndMessage){
+                        let gameEnd = (gameEndMessage.includes("wins") | gameEndMessage.includes("draw"));
+                        let isWon = gameEndMessage.includes("wins");
+                        if(gameEnd){
+                            round = 0;
+                            if(isWon){
+                                const winningCells = winingCells(gameboard);
+                                winningCells.forEach(changeCellColor);
+                            }
+                            restart.classList.remove("disabled");
+                            restart.disabled = false;
+            
+                            restart.addEventListener("click",()=>{
+                                round = 0;
+                                gameBoardNodeList.forEach((value)=>{
+                                    value.innerHTML = "";
+                                    value.style.backgroundColor = "#CAE9EA";
+                                    value.style.color = "black";
+                                    value.disabled = false;
+                                })
+                    
+                                for(let i = 0 ; i<= 8 ; i++){
+                                    gameboard[i] = i;
+                                }
+
+                            })
+                        }
+                        return gameEnd;
+            
+                    }
+                };
+            }
+        })
+
+        
+        
+    }
     function changeCellColor(i){
         gameBoardNodeList[i].style.backgroundColor = "black";
         gameBoardNodeList[i].style.color = "white";
