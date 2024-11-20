@@ -1,8 +1,6 @@
 :root{
-    --charecter-color: #CAE9EA;
-    --gradient-right: linear-gradient(to right, #CAE9EA, #208C8C);
-    --gradient-left: linear-gradient(to left, #CAE9EA,#208C8C);
-    --secondary-color: #1E3A8A ;
+    --charecter-color: #ffffff;
+    --secondary-color: #b9b7b7 ;
     --background-color: #100F0F;
     --background-color2: black;
     --border-color-cards: rgba(71,71,71,50%);

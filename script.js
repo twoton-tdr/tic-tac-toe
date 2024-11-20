@@ -9,7 +9,7 @@ const uiFlow = (function (){
         const singleplayerButton = document.querySelector("#singleplayer");
         const dialog = document.querySelector("#dialog");
         const singlePlayerDialog = document.querySelector("#single-mode");
-
+        const backButton = document.querySelector("#back");
         
         let mode;
         let playerTwo;
@@ -56,8 +56,10 @@ const uiFlow = (function (){
 
                 singlePlayerDialog.close()
                 gameRounds(mode,playerOne,playerTwo)
-                
-                
+                singleplayerButton.classList.add("disabled");
+                multiplayerButton.classList.add("disabled");
+                backButton.classList.remove("disabled");
+                restart.classList.remove("disabled")
                 })
 
 
@@ -98,9 +100,10 @@ const uiFlow = (function (){
                 
                 gameRounds(mode,playerOne,playerTwo);
 
-                
-
-                
+                singleplayerButton.classList.add("disabled");
+                multiplayerButton.classList.add("disabled");
+                backButton.classList.remove("disabled");
+                restart.classList.remove("disabled")
                 })
 
             })
@@ -256,7 +259,7 @@ function gameRounds(mode, playerOne, playerTwo){
     
     let restart = document.querySelector("#restart");
     restart.disabled = true;
-    restart.classList.add("disabled");
+    // restart.classList.add("disabled");
 
     let round = 0;
     if(mode === "Multi Player"){
@@ -342,11 +345,11 @@ function gameRounds(mode, playerOne, playerTwo){
         restart.addEventListener("click",()=>{
             gameBoardNodeList.forEach((value)=>{
                 value.innerHTML = "";
-                value.style.backgroundColor = "#CAE9EA";
+                value.style.backgroundColor = "white";
                 value.style.color = "black";
                 value.disabled = false;
             })
-
+            
             for(let i = 0 ; i<= 8 ; i++){
                 gameboard[i] = i;
                 
@@ -374,6 +377,7 @@ function gameRounds(mode, playerOne, playerTwo){
         gameCells.addEventListener("click",(e)=>{
             let status;
             if(!e.target.innerHTML){
+                
                 if(round != 9){
                     if(e.target.dataset.number){
                         console.log(` ${round} ${playerOneMarker}`)
@@ -438,11 +442,11 @@ function gameRounds(mode, playerOne, playerTwo){
                                 round = 0;
                                 gameBoardNodeList.forEach((value)=>{
                                     value.innerHTML = "";
-                                    value.style.backgroundColor = "#CAE9EA";
+                                    value.style.backgroundColor = "white";
                                     value.style.color = "black";
                                     value.disabled = false;
                                 })
-                    
+                                restart.disabled = true;
                                 for(let i = 0 ; i<= 8 ; i++){
                                     gameboard[i] = i;
                                 }
@@ -463,7 +467,11 @@ function gameRounds(mode, playerOne, playerTwo){
         gameBoardNodeList[i].style.backgroundColor = "black";
         gameBoardNodeList[i].style.color = "white";
     }
-
+    
+    const reloadButton = document.querySelector("#back");
+    reloadButton.addEventListener("click",()=>{
+        window.location.reload()
+    })
  
 }
 
