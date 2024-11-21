@@ -17,51 +17,13 @@ const uiFlow = (function (){
 
         singleplayerButton.addEventListener("click",()=>{
             mode = "Single Player";
-
-            singlePlayerDialog.showModal();
-
-            const playerOneInput = singlePlayerDialog.querySelector("#single-mode-player-name");
-            const close = document.querySelector("#Cancel");
-            const submit = singlePlayerDialog.querySelector("#submit");
-            let playerOneMarker;
-            let computerMarker;
-
-            close.addEventListener("click",()=>{
-                playerOneInput.value = "";
-                singlePlayerDialog.close();
-            })
-
- 
-            submit.addEventListener("click",()=>{
-
-                playerOneName = playerOneInput.value;
-                playerTwoName = "Computer";
-                playerOneInput.value = "";
-                // getting the input from the selector
-                sides = document.getElementsByName("single-player-side-selection");
-                if(sides[0].checked){
-                    playerOneMarker = "x";
-                    computerMarker = "o";
-                }
-                else{
-                    playerOneMarker = "o";
-                    computerMarker = "x";
-                }
-
-                playerOne = {"name":playerOneName , "marker":playerOneMarker}
-                playerTwo = {"name":"Computer" , "marker":computerMarker}
-
-                console.log(playerOne,playerTwo);
-                
-
-                singlePlayerDialog.close()
-                gameRounds(mode,playerOne,playerTwo)
-                singleplayerButton.classList.add("disabled");
-                multiplayerButton.classList.add("disabled");
-                backButton.classList.remove("disabled");
-                restart.classList.remove("disabled")
-                })
-
+            const playerOne = {"name": "Player" , "marker":"x"}
+            const playerTwo = {"name":"Computer" , "marker":"o"}
+            gameRounds(mode,playerOne,playerTwo)
+            singleplayerButton.classList.add("disabled");
+            multiplayerButton.classList.add("disabled");
+            backButton.classList.remove("disabled");
+            restart.classList.remove("disabled")
 
         })
             
@@ -272,35 +234,19 @@ function gameRounds(mode, playerOne, playerTwo){
 
 
     function multiplayerMode() {
+        changeDisplay(`${playerTwo.name}'s Turn`);
         gameCells.addEventListener("click",(e)=>{
-            console.log(e)
-
+            
             if(round%2 == 0){
-                if(mode == "Single Player"){
-                    let inputTwo = computerguess(gameboard,playerTwoMarker);
-                    if(gameboard[inputTwo]==="x" | gameboard[inputTwo] === "o"){
-                        inputTwo = computerguess(gameboard,playerTwoMarker)
-                    }
-                    
-                    gameBoardNodeList[inputTwo].innerHTML = playerTwoMarker;
-                    gameboard[inputTwo]= playerTwoMarker;
+                if(e.target.dataset.number){
+                    e.target.disabled = true;
+                    const i = e.target.dataset.number;
+                    gameBoardNodeList[i].innerHTML = playerTwoMarker;
+                    gameboard[i]= playerTwoMarker;
                     round++;
-                    gameEndMessage = isWin(round,gameboard);
-                    
-                }
-                else if(mode == "Multi Player"){
-                    if(e.target.dataset.number){
-                        console.log(` ${round} ${playerTwoMarker}`)
-                        e.target.disabled = true;
-                        const i = e.target.dataset.number;
-                        gameBoardNodeList[i].innerHTML = playerTwoMarker;
-                        gameboard[i]= playerTwoMarker;
-                        round++;
-                        gameEndMessage = isWin(round,gameboard)
-                    }
-                }   
-                
-
+                    changeDisplay(`${playerOne.name}'s Turn`);
+                    gameEndMessage = isWin(round,gameboard)
+                } 
             }
             else if(round === 9){
                 
@@ -308,13 +254,14 @@ function gameRounds(mode, playerOne, playerTwo){
             }
             
             else if(round%2 === 1){
+                
                 if(e.target.dataset.number){
-                    console.log(` ${round} ${playerOneMarker}`)
                     e.target.disabled = true;
                     const i = e.target.dataset.number;
                     gameBoardNodeList[i].innerHTML = playerOneMarker;
                     gameboard[i]= playerOneMarker;
                     round++;
+                    changeDisplay(`${playerTwo.name}'s Turn`);
                     gameEndMessage = isWin(round,gameboard)
                 }
                 
@@ -328,6 +275,7 @@ function gameRounds(mode, playerOne, playerTwo){
             let gameEnd = (gameEndMessage.includes("wins") | gameEndMessage.includes("draw"));
             let isWon = gameEndMessage.includes("wins")
             if(gameEnd){
+                    changeDisplay(gameEndMessage)
                     round = 0;
                     if(isWon){
                         const winningCells = winingCells(gameboard);
@@ -362,11 +310,8 @@ function gameRounds(mode, playerOne, playerTwo){
 
         firstMove();
         function firstMove(){
+            // using to start the game with the computer move else it will wait for the player to click on the board to produce the first move
             let inputTwo = computerguess(gameboard,playerTwoMarker);
-            if(gameboard[inputTwo]==="x" | gameboard[inputTwo] === "o"){ //this might cause error in the future if both the guess is not true
-                firstMove();
-            }
-            
             gameBoardNodeList[inputTwo].innerHTML = playerTwoMarker;
             gameboard[inputTwo]= playerTwoMarker;
             round++;    
@@ -377,7 +322,7 @@ function gameRounds(mode, playerOne, playerTwo){
         gameCells.addEventListener("click",(e)=>{
             let status;
             if(!e.target.innerHTML){
-                
+                //e.target.innerHTML fetches what is inside the Cell("x" or "o")
                 if(round != 9){
                     if(e.target.dataset.number){
                         console.log(` ${round} ${playerOneMarker}`)
@@ -427,6 +372,7 @@ function gameRounds(mode, playerOne, playerTwo){
                     }
 
                     function gameWinCheckSinglePlayer(gameEndMessage){
+                        // does the check after each inputs and updates the current status
                         let gameEnd = (gameEndMessage.includes("wins") | gameEndMessage.includes("draw"));
                         let isWon = gameEndMessage.includes("wins");
                         if(gameEnd){
@@ -450,7 +396,7 @@ function gameRounds(mode, playerOne, playerTwo){
                                 for(let i = 0 ; i<= 8 ; i++){
                                     gameboard[i] = i;
                                 }
-
+                                singleplayerMode();
                             })
                         }
                         return gameEnd;
@@ -474,6 +420,7 @@ function gameRounds(mode, playerOne, playerTwo){
     })
  
 }
+
 
 function winingCells (gameboard) {
     
@@ -551,10 +498,9 @@ function isWin (k , gameboard) {
 
 
 function changeDisplay(message){
-    console.log(message);
     let rollingDisplay = document.querySelector("#marqee-display");
+    console.log(rollingDisplay)
     rollingDisplay.innerHTML = message ;
-
 }
 
 
