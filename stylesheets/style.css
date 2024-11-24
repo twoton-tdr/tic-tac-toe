@@ -119,6 +119,10 @@ dialog{
 
 /* single player dialog */
 
+dialog::backdrop{
+    backdrop-filter: blur(10px);
+}
+
 .single-input-elements form{
     display: flex;
     justify-content: space-around;
@@ -145,6 +149,12 @@ dialog{
     display: flex;
     flex-direction: column;
     justify-content: space-around;
+}
+input{
+    outline: none;
+    padding: 10px;
+    color: white;
+    font-weight: 500;
 }
 .single-dialog-heading {
     font-weight: 700;
