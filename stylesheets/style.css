@@ -13,9 +13,6 @@
     font-family: Roboto,sans-serif;
 }
 
-body{
-    /* background-color: var(--background-color); */
-}
 .heading{
     font-family: "proxima soft";
     font-size: 52px;
@@ -35,12 +32,16 @@ body{
     align-items: center;
 }
 .option{
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     width: 100%;
     font-family: "proxima soft";
     font-size: 24px;
 }
 .single-multi-option{
-    width: 30%;
+    gap: 10px;
     display: flex;
     justify-content: space-around;
     padding: 20px;
@@ -57,6 +58,9 @@ body{
     display: none;
 }
 
+#marqee-display{
+    font-size: 24px;
+}
 
 /* dialog */
 
