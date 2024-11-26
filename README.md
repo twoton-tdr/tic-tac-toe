@@ -10,3 +10,6 @@ Welcome to the Tic-Tac-Toe game! This is a simple game where you can enter your 
 ## HOW TO PLAY
 Tic Tac Toe is a simple two-player game played on a 3x3 grid. The goal is to be the first player to align three of your symbols (X or O) in a row, column, or diagonal.
 
+### Win Cases
+
+![1000_F_133333502_3AU0f60WH259o0xtUcrynb0rUMaJxGfq](https://github.com/user-attachments/assets/637cb4a0-1108-4227-8375-9c07c4a182f7)
